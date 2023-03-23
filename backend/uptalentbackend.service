@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=java -jar /var/lib/jenkins/uptalentbackend.jar
+ExecStart=java -jar /var/lib/jenkins/UpTalentBackend.jar
 TimeoutStartSec=0
 RemainAfterExit=yes
 Restart=on-failure
