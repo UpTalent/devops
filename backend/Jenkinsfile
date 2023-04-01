@@ -5,6 +5,8 @@ pipeline {
         WEBHOOK_URL = credentials('DiscordWebhookAT')
         BUCKET = 'oleksandr-team-bucket'
         REGION = 'eu-central-1'
+        BACKEND_ACCESS_KEY = 'at_backend_access_key'
+        BACKEND_SECRET_KEY = 'at_backend_secret_key'
     }
     stages {
         stage('Build') {
@@ -13,7 +15,14 @@ pipeline {
                 git branch: 'dev', url: 'https://github.com/Team-Alexander/backend.git'
                 sh '''
                     export JAVA_HOME="/lib/jvm/jdk-17"
+
+                    export BUCKET="oleksandr-team-backend"
+                    export S3_ACCESS_KEY=$(aws ssm get-parameter --region ${REGION} --name ${BACKEND_ACCESS_KEY} --with-decryption --query Parameter.Value --output text)
+                    export S3_SECRET_KEY=$(aws ssm get-parameter --region ${REGION} --name ${BACKEND_SECRET_KEY} --with-decryption --query Parameter.Value --output text)
+
                     chmod 744 ./mvnw
+                    rm -f .env
+                    echo "SPRING_PROFILES_ACTIVE=prod" >> .env
                     ./mvnw clean package
                     cp ./target/UpTalentBackend*.jar ./UpTalentBackend-${BUILD_NUMBER}.jar
                 '''
