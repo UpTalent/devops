@@ -47,8 +47,9 @@ pipeline {
 
                     chmod 744 ./mvnw
                     ./mvnw clean package
+                    mv ./target/UpTalentBackend*.jar ./UpTalentBackend.jar
                 '''
-                stash name: 'jar', includes: './target/UpTalentBackend*.jar'
+                stash name: 'jar', includes: './target/*.jar'
             }
         }
         stage('Deploy') {
