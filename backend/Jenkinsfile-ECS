@@ -47,9 +47,8 @@ pipeline {
 
                     chmod 744 ./mvnw
                     ./mvnw clean package
-                    mv ./target/UpTalentBackend*.jar ./UpTalentBackend.jar
                 '''
-                stash name: 'jar', includes: '*.jar'
+                stash name: 'jar', includes: './target/UpTalentBackend*.jar'
             }
         }
         stage('Deploy') {
@@ -60,7 +59,7 @@ pipeline {
                     sudo systemctl stop uptalentbackend || true
                     chmod 755 ./backend/install-systemd-service.sh
                     ./backend/install-systemd-service.sh
-                    mv -f ./UpTalentBackend.jar ~/UpTalentBackend.jar
+                    mv -f ./UpTalentBackend*.jar ~/UpTalentBackend.jar
                     sudo systemctl enable uptalentbackend --now
                     rm -rf ./*
                 '''
