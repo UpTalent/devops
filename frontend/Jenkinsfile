@@ -2,12 +2,13 @@ pipeline {
     agent { label 'frontend' }
     environment {
         SERVER_CREDENTIALS = 's3-access'
-        WEBHOOK_URL = credentials('DiscordWebhookAT')
         BUCKET = 'oleksandr-team-bucket'
+
         API_URL = credentials('url_back_at')
         REGION = 'eu-central-1'
         FRONTEND_ACCESS_KEY = credentials('at_frontend_access_key')
         FRONTEND_SECRET_KEY = credentials('at_frontend_secret_key')
+        WEBHOOK_URL = credentials('DiscordWebhookAT')
     }
     stages {
         stage('clone') {
